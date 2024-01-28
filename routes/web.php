@@ -16,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/himani', function () {
     return view('welcome');
 });
+
+
+// admin Layut 
+
+Route::get('/layout/admin_app', function () {
+    return view('layout.admin_app');
+ }); 
