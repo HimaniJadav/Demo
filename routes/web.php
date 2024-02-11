@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProductController;
+  
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +24,6 @@ Route::get('/himani', function () {
 
 Route::get('/layout/admin_app', function () {
     return view('layout.admin_app');
- }); 
+    });
+
+Route::resource('products', ProductController::class);
