@@ -3,110 +3,84 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 use App\Models\Product;
+
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    function create()
     {
-        // $products = Product::latest()->paginate(5);
-        $products = Product::all();
-
-        return view('products.index', compact('products'));
-        // ->with('i', (request()->input('page', 1) - 1) * 5);
+        $category = Category::all();
+        return view('admin.products.create', compact('category'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    function store(Request $req)
     {
-        return view('products.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
+        $req->validate([
             'name' => 'required',
             'detail' => 'required',
+            'price' => 'required',
+            'description' => 'required',
+
+
         ]);
+        $products =  new Product();
+        $products->name = $req->name;
+        $products->detail = $req->detail;
+        $products->price = $req->price;
+        $products->c_id = $req->c_id;
 
-        // Product::create($request->all());
-        $product =  new Product();
-        $product->name = $request->name;
-        $product->detail = $request->detail;
-        $product->save();
+        $products->description = $req->description;
+        $products->image = time() . '.' . $req->image->extension();
+        $req->image->move(public_path('product'), $products->image);
 
 
-        return redirect()->route('products.index')
-        ->with('success', 'Product created successfully.');
+        $products->save();
+        return redirect()->back()
+            ->with('success', 'product created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
+    function index()
     {
-        return view('products.show', compact('product'));
+        $product = Product::all();
+        return view('admin.products.index', compact('product'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
+    function delete($id)
     {
-        return view('products.edit', compact('product'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Product $product)
-    {
-        $request->validate([
-            'name' => 'required',
-            'detail' => 'required',
-        ]);
-
-        $product->update($request->all());
-
-        return redirect()->route('products.index')
-        ->with('success', 'Product updated successfully');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Product $product)
-    {
+        $product = Product::find($id);
         $product->delete();
+        return redirect()->back()
+            ->with('success', 'products deleted successfully.');
+    }
+    function edit($id)
+    {
+        $eproduct = Product::find($id);
+        $category = Category::find($id);
 
-        return redirect()->route('products.index')
-        ->with('success', 'Product deleted successfully');
+        return view('admin.products.edit', compact('category', 'eproduct'));
+    }
+    function update(Request $req)
+    {
+        $req->validate([
+            'name' => 'required',
+            'detail' => 'required',
+            'price' => 'required',
+            'description' => 'required',
+
+        ]);
+        $id = $req->id;
+        $products =  new Product();
+        $products->name = $req->name;
+        $products->detail = $req->detail;
+        $products->price = $req->price;
+        $products->c_id = $req->c_id;
+
+        $products->description = $req->description;
+        $products->image = time() . '.' . $req->image->extension();
+        $req->image->move(public_path('product'), $products->image);
+
+
+        $products->save();
+        return redirect()->back()
+            ->with('success', 'Product updated successfully.');
     }
 }

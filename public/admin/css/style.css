@@ -1,6 +1,7 @@
 /********** Template CSS **********/
 :root {
     --primary: #EB1616;
+    /* --primary: green; */
     --secondary: #191C24;
     --light: #6C7293;
     --dark: #000000;
@@ -16,7 +17,7 @@
 
 
 /*** Spinner ***/
-#spinner {
+/* #spinner {
     opacity: 0;
     visibility: hidden;
     transition: opacity .5s ease-out, visibility 0s linear .5s;
@@ -27,7 +28,7 @@
     transition: opacity .5s ease-out, visibility 0s linear 0s;
     visibility: visible;
     opacity: 1;
-}
+} */
 
 
 /*** Button ***/
@@ -281,6 +282,11 @@
     border: 5px solid var(--primary);
     border-radius: 15px;
     transition: .5s;
+}
+.fontsfordev{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size:15px;    font-style: italic;
+    
 }
 
 .testimonial-carousel .owl-dot.active {
